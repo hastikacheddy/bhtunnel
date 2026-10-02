@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: "3.11"
           cache: pip
-      - run: pip install -r requirements-lock.txt && pip install -e ".[dev,quantum]"
+      - run: pip install -r requirements-lock.txt && pip install -e ".[dev,quantum,app]"
       - run: pytest -q -m "not slow"
 
   full:
@@ -27,5 +27,5 @@ jobs:
         with:
           python-version: "3.11"
           cache: pip
-      - run: pip install -r requirements-lock.txt && pip install -e ".[dev,quantum]"
+      - run: pip install -r requirements-lock.txt && pip install -e ".[dev,quantum,app]"
       - run: pytest -q

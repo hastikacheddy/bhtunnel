@@ -11,6 +11,10 @@ The quantum computer only ever estimates Γ_l. The Hawking spectrum is classical
 post-processing, N_ω ∝ Σ(2l+1)Γ_l / (e^{ω/T_H} − 1), and is reported that way.
 For positioning against prior work, see [docs/related_work.md](docs/related_work.md).
 
+**Interactive demo:** [huggingface.co/spaces/Hastika06/bhtunnel](https://huggingface.co/spaces/Hastika06/bhtunnel).
+It covers the wavepacket animation, greybody and Hawking curves, the live circuit, and the
+amplitude-estimation break-even. To run it locally, see "Interactive demo" below.
+
 ## Main results
 
 **1. Classical reference is validated** ([scripts/make_reference.py](scripts/make_reference.py))
@@ -103,6 +107,8 @@ src/bhtunnel/
   presets.py        named experiment boxes (Aer-scale and hardware-scale)
   ae.py             Grover operator, MLAE, Cramér–Rao cost model under noise
   bound.py          massive-scalar quasi-bound states in a Dirichlet box
+app/                Streamlit demo (views/: wavepacket, greybody, circuit, amplitude)
+deploy/hf-space/    Dockerfile + Space card for Hugging Face
 scripts/            one script per study → data/*.csv|json, figures/*.png
   run_ibm.py        IBM Runtime submission (dry run by default)
 notebooks/results_overview.ipynb   all results, for presentations
@@ -131,6 +137,21 @@ python scripts/make_reference.py
 Then run, in any order: `error_budget.py`, `resource_study.py`, `noise_study.py`,
 `amplitude_estimation.py` (needs `data/noise.json`) and `vqe_bound_state.py`.
 Each takes between about 20 seconds and 3 minutes.
+
+### Interactive demo
+
+```bash
+pip install -e ".[quantum,app]"
+```
+
+```bash
+streamlit run app/streamlit_app.py
+```
+
+The app reads precomputed greybody tables from `src/bhtunnel/data/`. Regenerate
+them with `scripts/make_app_tables.py`. The Hugging Face Space is defined in
+[deploy/hf-space/](deploy/hf-space/). It builds from this repository, so after
+pushing to `main`, use **Factory rebuild** in the Space settings.
 
 ### IBM hardware
 
