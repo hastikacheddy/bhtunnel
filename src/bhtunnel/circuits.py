@@ -98,6 +98,36 @@ def scattering_circuit(exp: Experiment, steps: int, measure: str | None = None
     return qc
 
 
+def block_circuit(exp: Experiment, steps: int) -> QuantumCircuit:
+    """scattering_circuit(exp, steps, "sign") with each stage boxed and labelled,
+    for drawing. Same operators, same order."""
+    n = exp.grid.n
+    dt = exp.time / steps
+
+    def qft(inverse: bool = False):
+        g = QFTGate(n).inverse() if inverse else QFTGate(n)
+        g.label = pad("QFT†" if inverse else "QFT")
+        return g
+
+    def pad(label: str) -> str:  # widen boxes so the drawer's qubit indices don't touch
+        return f"   {label}   "
+
+    qc = QuantumCircuit(n, 1)
+    qc.append(state_preparation(exp).to_gate(label=pad("ψ₀")), range(n))
+    qc.append(potential_evolution(exp, dt / 2).to_gate(label=pad("V/2")), range(n))
+    k_gate = diagonal_evolution(n, kinetic_terms(exp), dt).to_gate(label=pad("K"))
+    for i in range(steps):
+        last = i == steps - 1
+        qc.append(qft(inverse=True), range(n))
+        qc.append(k_gate, range(n))
+        qc.append(qft(), range(n))
+        qc.append(potential_evolution(exp, dt / 2 if last else dt)
+                  .to_gate(label=pad("V/2" if last else "V")), range(n))
+    qc.append(qft(inverse=True), range(n))
+    qc.measure(n - 1, 0)
+    return qc
+
+
 def momentum_statevector_twin(exp: Experiment, steps: int) -> np.ndarray:
     """What scattering_circuit(exp, steps) should output, from the numpy twin."""
     return np.fft.fft(exp.evolve_strang(steps)) / np.sqrt(exp.grid.N)

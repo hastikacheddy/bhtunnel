@@ -86,7 +86,11 @@ fig.add_trace(go.Scatter(x=x, y=dens[0], mode="lines", name="|ψ|²", fill="toze
                          line=dict(color=SERIES[0], width=2)), row=2, col=1)
 fig.add_trace(go.Scatter(x=x, y=dens[0], mode="lines", name="initial packet",
                          line=dict(color=MUTED, width=1, dash="dot")), row=2, col=1)
-fig.frames = [go.Frame(data=[go.Scatter(x=x, y=d)], traces=[1], name=f"{t:.0f}")
+# Frames restate all three traces: frames that touch only the density trace make
+# Plotly drop the potential from the upper panel during playback.
+v_trace, init_trace = fig.data[0], fig.data[2]
+fig.frames = [go.Frame(data=[v_trace, go.Scatter(x=x, y=d), init_trace],
+                       traces=[0, 1, 2], name=f"{t:.0f}")
               for d, t in zip(dens, ts)]
 fig.update_layout(
     updatemenus=[dict(type="buttons", showactive=False, x=0, y=-0.12, xanchor="left",
@@ -114,7 +118,7 @@ st.subheader("Γ at every frequency in the packet, from one run")
 st.markdown(
     "Measuring all qubits after the final QFT† gives the momentum spectrum. Incoming "
     "momenta point toward the horizon, so for each frequency bin, "
-    "Γ(ω) = P_after(bin) / P_before(bin)."
+    r"$\Gamma(\omega) = P_\mathrm{after}(\mathrm{bin}) \,/\, P_\mathrm{before}(\mathrm{bin})$."
 )
 k, g, p0 = exp.resolved_gamma(psi_final, rel_floor=0.15)
 kk = np.linspace(max(lo - 0.08, 0.02), hi + 0.08, 300)
