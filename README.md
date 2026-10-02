@@ -1,5 +1,10 @@
 # Quantum simulation of black-hole greybody factors
 
+[![tests](https://github.com/hastikacheddy/bhtunnel/actions/workflows/tests.yml/badge.svg)](https://github.com/hastikacheddy/bhtunnel/actions/workflows/tests.yml)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
+[![Qiskit 2.x](https://img.shields.io/badge/Qiskit-2.x-6929C4.svg)](https://www.ibm.com/quantum/qiskit)
+
 This project simulates wave scattering off the Schwarzschild Regge–Wheeler
 barrier on a digital quantum computer. The target is the **greybody factors**
 Γ_l(ω) that filter Hawking radiation. Alongside the simulation it builds an
@@ -11,9 +16,10 @@ The quantum computer only ever estimates Γ_l. The Hawking spectrum is classical
 post-processing, N_ω ∝ Σ(2l+1)Γ_l / (e^{ω/T_H} − 1), and is reported that way.
 For positioning against prior work, see [docs/related_work.md](docs/related_work.md).
 
-**Interactive demo:** [huggingface.co/spaces/Hastika06/bhtunnel](https://huggingface.co/spaces/Hastika06/bhtunnel).
-It covers the wavepacket animation, greybody and Hawking curves, the live circuit, and the
-amplitude-estimation break-even. To run it locally, see "Interactive demo" below.
+**Interactive demo:** a Streamlit app covers the wavepacket animation, greybody
+and Hawking curves, the live circuit, and the amplitude-estimation break-even.
+To run it locally, see "Interactive demo" below. A Hugging Face Space definition
+is in [deploy/hf-space/](deploy/hf-space/).
 
 ## Main results
 
