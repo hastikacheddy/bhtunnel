@@ -93,7 +93,7 @@ def zne_exponential(scales, ps, shot_sd: float) -> float:
 
 
 def run(steps: int, shots: int, sim, backend) -> dict:
-    exp = replace(HW5, _cache={})
+    exp = replace(HW5)
     p_ideal = exp.transmitted_probability(exp.evolve_strang(steps))
     out = {"steps": steps, "p_ideal_twin": p_ideal,
            "p_exact_grid": exp.transmitted_probability(exp.evolve_exact())}

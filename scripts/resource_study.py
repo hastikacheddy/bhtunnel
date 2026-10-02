@@ -51,7 +51,7 @@ def two_q(qc: QuantumCircuit, **kw) -> tuple[int, int]:
 
 def scaled_experiment(n: int) -> Experiment:
     """The AER_L1 physics box resampled on 2^n points."""
-    return replace(AER_L1, grid=Grid(n, AER_L1.grid.a, AER_L1.grid.b), _cache={})
+    return replace(AER_L1, grid=Grid(n, AER_L1.grid.a, AER_L1.grid.b))
 
 
 def per_step_costs(ns=range(4, 10)) -> list[dict]:
@@ -85,7 +85,7 @@ def tradeoff(steps_list=(10, 20, 40, 60, 100), walsh_list=(32, 64, 96, 128, 192,
     cost_qk = two_q(base)[0]
     v_cost = {}
     for K in walsh_list:
-        e = replace(exp, walsh_terms=K, _cache={})
+        e = replace(exp, walsh_terms=K)
         if K is None:  # production circuits synthesise the exact diagonal
             qc = QuantumCircuit(n)
             qc.append(DiagonalGate(list(np.exp(-1j * e.potential))), range(n))
@@ -94,7 +94,7 @@ def tradeoff(steps_list=(10, 20, 40, 60, 100), walsh_list=(32, 64, 96, 128, 192,
             v_cost[K] = two_q(diagonal_evolution(n, walsh_terms(e.potential), 1.0))[0]
     rows = []
     for K in walsh_list:
-        e = replace(exp, walsh_terms=K, _cache={})
+        e = replace(exp, walsh_terms=K)
         for s in steps_list:
             err = abs(e.transmitted_probability(e.evolve_strang(s)) - p_ref)
             rows.append(dict(walsh=K if K else 255, steps=s,

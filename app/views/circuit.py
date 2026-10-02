@@ -24,7 +24,7 @@ presets = {"HW5: 5 qubits (hardware scale)": HW5, "HW6: 6 qubits (hardware scale
 c1, c2 = st.columns([2, 1])
 name = c1.selectbox("Experiment", list(presets))
 steps = c2.slider("Strang steps", 1, 4, 2)
-exp = replace(presets[name], _cache={})
+exp = replace(presets[name])
 n, dt = exp.grid.n, exp.time / steps
 
 
@@ -62,7 +62,7 @@ st.caption("ψ₀: prepare the Gaussian packet · V, V/2: diagonal phase e^{−i
 @st.cache_data(show_spinner="Transpiling for an IBM Heron device…")
 def costs(name, steps):
     from qiskit_ibm_runtime.fake_provider import FakeFez
-    e = replace(presets[name], _cache={})
+    e = replace(presets[name])
     qc = scattering_circuit(e, steps, measure="sign")
     flat = transpile(qc, basis_gates=["cz", "rz", "sx", "x"], optimization_level=2,
                      seed_transpiler=7)
@@ -73,7 +73,7 @@ def costs(name, steps):
 
 @st.cache_data(show_spinner="Simulating the circuit on Aer…")
 def check(name, steps):
-    e = replace(presets[name], _cache={})
+    e = replace(presets[name])
     sv = Statevector(scattering_circuit(e, steps))
     p_circ = float(sv.probabilities([e.grid.n - 1])[1])
     return (p_circ, e.transmitted_probability(e.evolve_strang(steps)),

@@ -114,7 +114,9 @@ class Experiment:
     x0: float = 110.0
     t: float | None = None           # default: see default_time()
     walsh_terms: int | None = None   # truncate V to this many Walsh terms
-    _cache: dict = field(default_factory=dict, compare=False, repr=False)
+    # Not an init field, so dataclasses.replace() gives every copy a fresh cache
+    # instead of sharing (and silently reusing) the original's potential.
+    _cache: dict = field(default_factory=dict, init=False, compare=False, repr=False)
 
     @property
     def sigma_k(self) -> float:
