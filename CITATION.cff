@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "bhtunnel: quantum simulation of black-hole greybody factors and Hawking emission"
+version: 0.1.0
+date-released: 2026-10-03
+license: Apache-2.0
+authors:
+  - family-names: "Cheddy"
+    given-names: "Hastika"
+    alias: "hastikacheddy"
+keywords:
+  - quantum simulation
+  - black holes
+  - greybody factors
+  - Hawking radiation
+  - Qiskit
+  - amplitude estimation
+repository-code: "https://github.com/hastikacheddy/bhtunnel"

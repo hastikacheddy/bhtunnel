@@ -1,0 +1,6 @@
+link,P_T,abs_change
+exact,0.5154500119,0.000e+00
+box window,0.5161497806,6.998e-04
+grid (n=8),0.5172816316,1.132e-03
+Trotter (60 steps),0.5133499247,3.932e-03
+shot noise (10,000 shots, 1 sd),0.5133499247,4.998e-03

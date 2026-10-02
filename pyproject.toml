@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bhtunnel"
+version = "0.1.0"
+description = "Quantum simulation of black-hole greybody factors and Hawking emission"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+dependencies = ["numpy>=1.24", "scipy>=1.10", "matplotlib>=3.7"]
+
+[project.optional-dependencies]
+quantum = ["qiskit>=2.1", "qiskit-aer>=0.17", "qiskit-ibm-runtime>=0.40"]
+dev = ["pytest>=7"]
+notebooks = ["jupyter"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+markers = ["slow: multi-second physics checks (deselect with -m 'not slow')"]
