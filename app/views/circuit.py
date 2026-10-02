@@ -3,14 +3,11 @@ from dataclasses import replace
 import matplotlib
 
 matplotlib.use("Agg")
-import numpy as np
 import streamlit as st
-from qiskit import QuantumCircuit, transpile
-from qiskit.circuit.library import QFTGate
+from qiskit import transpile
 from qiskit.quantum_info import Statevector
 
-from bhtunnel.circuits import (diagonal_evolution, kinetic_terms, potential_evolution,
-                               scattering_circuit, state_preparation)
+from bhtunnel.circuits import block_circuit, kinetic_terms, scattering_circuit
 from bhtunnel.presets import HW5, HW6
 
 st.title("The quantum circuit")
@@ -25,37 +22,12 @@ c1, c2 = st.columns([2, 1])
 name = c1.selectbox("Experiment", list(presets))
 steps = c2.slider("Strang steps", 1, 4, 2)
 exp = replace(presets[name])
-n, dt = exp.grid.n, exp.time / steps
+n = exp.grid.n
 
 
-def display_circuit(exp, steps):
-    """Same operator sequence as scattering_circuit, with each block boxed."""
-    n = exp.grid.n
-
-    def qft(inverse=False):
-        g = QFTGate(n).inverse() if inverse else QFTGate(n)
-        g.label = "QFT†" if inverse else "QFT"
-        return g
-
-    qc = QuantumCircuit(n, 1)
-    qc.append(state_preparation(exp).to_gate(label="ψ₀"), range(n))
-    qc.append(potential_evolution(exp, dt / 2).to_gate(label="V/2"), range(n))
-    k_gate = diagonal_evolution(n, kinetic_terms(exp), dt).to_gate(label="K")
-    for i in range(steps):
-        qc.append(qft(inverse=True), range(n))
-        qc.append(k_gate, range(n))
-        qc.append(qft(), range(n))
-        last = i == steps - 1
-        qc.append(potential_evolution(exp, dt / 2 if last else dt)
-                  .to_gate(label="V/2" if last else "V"), range(n))
-    qc.append(qft(inverse=True), range(n))
-    qc.measure(n - 1, 0)
-    return qc
-
-
-st.pyplot(display_circuit(exp, steps).draw("mpl", fold=-1, scale=0.9), width="stretch")
-st.caption("ψ₀: prepare the Gaussian packet · V, V/2: diagonal phase e^{−iV dt}, "
-           "e^{−iV dt/2} · QFT†, K, QFT: kinetic phase e^{−ik² dt} in momentum space · "
+st.pyplot(block_circuit(exp, steps).draw("mpl", fold=-1, scale=0.9), width="stretch")
+st.caption(r"ψ₀: prepare the Gaussian packet · V, V/2: diagonal phases $e^{-iV\,dt}$, "
+           r"$e^{-iV\,dt/2}$ · QFT†, K, QFT: kinetic phase $e^{-ik^2 dt}$ in momentum space · "
            "final QFT† + measuring the top qubit = sign of the momentum.")
 
 

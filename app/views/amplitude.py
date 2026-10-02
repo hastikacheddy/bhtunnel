@@ -49,15 +49,19 @@ fig.add_trace(go.Scatter(x=xs, y=adv, mode="lines", name=f"p = {p:.0e}",
                          line=dict(color=SERIES[0], width=2)))
 fig.add_trace(go.Scatter(x=[one_minus], y=[samp / ae], mode="markers", name="your choice",
                          marker=dict(color=SERIES[1], size=12, line=dict(color="white", width=1.5))))
-fig.add_hline(y=1, line=dict(color=MUTED, width=1),
-              annotation_text="break-even", annotation_position="top left")
+fig.add_hline(y=1, line=dict(color=MUTED, width=1))
+# On a log axis Plotly reads annotation y in log10 units, so y=0 is the line at 1.
+fig.add_annotation(xref="paper", x=0, y=0, text="break-even", showarrow=False,
+                   xanchor="left", yanchor="bottom", font=dict(color=MUTED, size=11))
 for i, (label, lm) in enumerate(measured_lambdas().items()):
     color = SERIES[2 + i]
     fig.add_vline(x=1 - lm, line=dict(color=color, dash="dash", width=1.5))
     fig.add_trace(go.Scatter(x=[None], y=[None], mode="lines", name=f"{label}, noisy Aer",
                              line=dict(color=color, dash="dash", width=1.5)))
-fig.update_xaxes(type="log", title_text="per-oracle depolarisation 1 − λ")
-fig.update_yaxes(type="log", title_text="sampling calls / AE calls")
+fig.update_xaxes(type="log", dtick=1, exponentformat="power",
+                 title_text="per-oracle depolarisation 1 − λ")
+fig.update_yaxes(type="log", dtick=1, exponentformat="power",
+                 title_text="sampling calls / AE calls")
 fig.update_layout(title=f"Advantage at {eps:.0%} relative error")
 st.plotly_chart(style(fig, height=430), width="stretch")
 

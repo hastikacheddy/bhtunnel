@@ -15,6 +15,7 @@ quantum = ["qiskit>=2.1", "qiskit-aer>=0.17", "qiskit-ibm-runtime>=0.40"]
 dev = ["pytest>=7"]
 notebooks = ["jupyter"]
 app = ["streamlit>=1.40", "plotly>=5.20", "pylatexenc>=2.10"]
+docs = ["playwright>=1.40"]  # README screenshots; uses the locally installed Chrome
 
 [tool.setuptools.packages.find]
 where = ["src"]

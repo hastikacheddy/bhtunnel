@@ -28,7 +28,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from bhtunnel import greybody  # noqa: E402
 from bhtunnel.grid import Experiment, Grid  # noqa: E402
-from bhtunnel.window import Window, scatter_windowed  # noqa: E402
+from bhtunnel.window import scatter_windowed  # noqa: E402
 
 SERIES = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100"]
 INK, MUTED, GRID_C = "#0b0b0b", "#52514e", "#e4e3df"

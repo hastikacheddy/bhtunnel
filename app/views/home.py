@@ -21,13 +21,13 @@ c4.metric("VQE quasi-bound state", "ω = 0.29622", "fidelity 0.99993", delta_col
 
 st.subheader("How the quantum simulation works")
 st.markdown(
-    """
+    r"""
 1. **Encode space in qubits.** n qubits hold the wave on 2ⁿ points of the
    tortoise coordinate r*, which runs from the horizon (left) to far away (right).
 2. **Evolve with split-operator steps.** The potential acts as a diagonal phase.
    The kinetic term acts in momentum space, after a quantum Fourier transform,
-   where it is only a 2-qubit phase. The Hamiltonian is H = −∂²/∂r*² + V_l,
-   with eigenvalue ω².
+   where it is only a 2-qubit phase. The Hamiltonian is
+   $H = -\partial^2_{r_*} + V_l(r_*)$, with eigenvalue $\omega^2$.
 3. **Read out one qubit.** After a final QFT†, the top qubit is the *sign of the
    momentum*. Measuring it gives the probability that the wave went through
    toward the horizon. Measuring all qubits gives Γ at every frequency in the

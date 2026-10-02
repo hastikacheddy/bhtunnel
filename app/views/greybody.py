@@ -51,8 +51,9 @@ col2.plotly_chart(style(fv), width="stretch")
 
 st.subheader("Hawking emission")
 st.markdown(
-    "Per degree of freedom: d²N/dt dω = (1/2π) Σ_l (2l+1) Γ_l / (e^{ω/T_H} − 1), with "
-    f"T_H = 1/(8πM) = {T_HAWKING:.4f}/M. The quantum part only ever supplies Γ_l; the "
+    r"Per degree of freedom, $\dfrac{d^2N}{dt\,d\omega} = \dfrac{1}{2\pi}\sum_l "
+    r"\dfrac{(2l+1)\,\Gamma_l(\omega)}{e^{\omega/T_H}-1}$, with "
+    rf"$T_H = 1/(8\pi M) = {T_HAWKING:.4f}/M$. The quantum part only ever supplies $\Gamma_l$; the "
     "thermal factor is exact."
 )
 mask = omega <= 0.7
