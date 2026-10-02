@@ -40,6 +40,14 @@ def test_walsh_roundtrip_and_truncation():
     assert np.count_nonzero(np.abs(fwht(truncate_walsh(v, 5))[1:]) > 1e-12) == 5
 
 
+def test_replace_does_not_share_cache():
+    base = replace(SMALL)
+    v_full = base.potential                 # populate base's cache
+    trunc = replace(base, walsh_terms=4)
+    assert not np.array_equal(trunc.potential, v_full)
+    np.testing.assert_array_equal(trunc.potential, truncate_walsh(v_full, 4))
+
+
 def test_kinetic_operator_is_at_most_two_body():
     terms = kinetic_terms(SMALL)
     assert all(bin(mask).count("1") <= 2 for mask in terms)
@@ -65,7 +73,7 @@ def test_production_box_is_wrap_safe_and_accurate():
 
 @pytest.mark.parametrize("walsh", [None, 8])
 def test_circuit_matches_twin(walsh):
-    exp = replace(SMALL, walsh_terms=walsh, _cache={})
+    exp = replace(SMALL, walsh_terms=walsh)
     sv = Statevector(scattering_circuit(exp, 3)).data
     twin = momentum_statevector_twin(exp, 3)
     assert 1 - abs(np.vdot(sv, twin)) ** 2 < 1e-10
@@ -83,7 +91,7 @@ def test_hardware_presets_are_distinguishable_from_depolarised():
 # ------------------------------------------------------------------ AE
 
 def test_grover_circuits_follow_sin2_law():
-    exp = replace(HW5, k0=0.16, _cache={})
+    exp = replace(HW5, k0=0.16)
     a = scattering_circuit(exp, 1)
     theta = np.arcsin(np.sqrt(exp.transmitted_probability(exp.evolve_strang(1))))
     for m in (0, 1, 2):

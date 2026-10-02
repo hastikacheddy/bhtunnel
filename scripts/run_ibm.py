@@ -36,7 +36,7 @@ OUT = ROOT / "data" / "hardware"
 
 
 def build_pubs(backend, steps_list, precision: float):
-    exp = replace(HW5, _cache={})
+    exp = replace(HW5)
     n = exp.grid.n
     pm = generate_preset_pass_manager(backend=backend, optimization_level=3,
                                       seed_transpiler=11)
